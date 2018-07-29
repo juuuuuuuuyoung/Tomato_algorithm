@@ -1,2 +1,4 @@
 # Tomato_algorithm
-welcome
+## algorithm study
+- BOJ
+- OnCoder
