@@ -89,7 +89,7 @@ int main() {
 		}
 		
 		if(visited[nexty][nextx][nextd]){
-			cout << nowx << " "<<nowy;
+			cout << nowx << " "<<nowy<<endl;
 			break;
 		}
 		else {
@@ -98,7 +98,5 @@ int main() {
 			befored = nextd;
 		}
 	}
-    
-	cout << endl;
     return 0;
 }
