@@ -4,12 +4,6 @@
 
 using namespace std;
 
-//최소 이동거리는 4km 최대 이동거리는 178km
-//40km까지 : 720원
-//41km부터 : 8km마다 80원 추가
-//최초 잔액이 20,000원
-//더 이상 차감할 수 없으면 이동할 수 없으므로 현재 잔액을 출력하고 프로그램을 종료
-
 int main() {
     string line;
     getline(cin, line);
