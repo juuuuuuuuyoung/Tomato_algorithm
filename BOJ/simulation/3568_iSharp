@@ -1,0 +1,44 @@
+#include<iostream>
+#include<string>
+#include<vector>
+using namespace std;
+
+int main(){
+	string txt;
+	getline(cin,txt);
+	vector<string> mem;
+	string now = "";
+	for(char temp : txt){
+		if(temp==' ' || temp ==',' || temp ==';'){
+			if(now.length() > 0) mem.push_back(now);
+			now ="";
+		}	
+		else{
+			now += temp;
+		}
+	}
+	string now2 ;
+	for(int i = 1; i < mem.size(); i++){
+		now2 = mem[0];
+		int e=0;
+		for(int j=mem[i].size()-1; j>=0 ; j--){
+			if(mem[i][j]==']') mem[i][j]= '[';
+			else if(mem[i][j]=='[') mem[i][j]= ']';
+			else if(mem[i][j]>=65 &&mem[i][j]<=90){
+				now2 +=' ';
+				e = j;
+				break;
+			}
+			else if(mem[i][j]>=97 &&mem[i][j]<=122){
+				e = j;
+				now2 +=' ';
+				break;
+			}
+			now2 += mem[i][j];
+		}
+		for(int j = 0; j <=e;j++)now2 += mem[i][j];   //영어 남은거는 차례대로!
+		cout << now2 << ";"<< endl;
+	}
+
+	return 0;
+}
