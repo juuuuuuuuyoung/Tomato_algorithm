@@ -1,56 +1,64 @@
-#include <bits/stdc++.h>
+//4:20 // 4:44
+#include<iostream>
+#include<vector>
 using namespace std;
 
-#define all(v) (v).begin(),(v).end()
+int N, M;
+int mem[51][51]={0};
+vector<pair<int, int>> home;
+vector<pair<int, int>> chicken;
 
-using ii = pair<int, int>;
+vector<pair<int, int>> nowchicken;
 
-const int INF = 0x3F3F3F3F;
 
-vector<ii> offices, people;
+int minnum=987654321;
 
-// i번 치킨집과 j번 집의 거리
-int dist[13][2500];
+int calcmindistance(vector<pair<int, int>> &nowchicken){
+	int ans=0;
 
-int main() {
-	int n, m;
-	scanf("%d %d", &n, &m);
-	for (int i = 0; i < n; ++i) {
-		for (int x, j = 0; j < n; ++j) {
-			scanf("%d", &x);
-			if (x == 1)
-				people.push_back(make_pair(i, j));
-			else if (x == 2)
-				offices.push_back(make_pair(i, j));
+	for(int i = 0; i < home.size(); i++){
+		int hd = 987654321; //그 집에서 치킨집까지 최소 거리
+		for(int j = 0; j < nowchicken.size(); j++){
+			int nhd = abs(home[i].first-nowchicken[j].first) + abs(home[i].second-nowchicken[j].second); //그 집에서 현재 치킨집까지 거리
+			hd = min(hd,nhd);
+		}
+		ans += hd;
+	}
+	return ans;
+}
+
+void Go(int idx, int cnt){
+	if(cnt == M){ //M개 고르면
+		//최소 치킨거리 구하기
+		int nowmin = calcmindistance(nowchicken);
+		if(minnum>=nowmin) minnum = nowmin;
+		return;
+	}
+	
+	for(int i = idx+1; i < chicken.size(); i++){
+		nowchicken.push_back(make_pair(chicken[i].first,chicken[i].second));
+		Go(i,cnt+1);
+		nowchicken.pop_back();
+		Go(i,cnt);
+	}
+	 return;
+}
+
+int main(){
+	cin >> N >> M;
+	for(int i = 0; i < N; i ++){
+		for(int j = 0; j < N; j++){
+			cin >> mem[i][j];
+			if(mem[i][j]==1)home.push_back(make_pair(i,j));
+			else if(mem[i][j]==2)chicken.push_back(make_pair(i,j));
 		}
 	}
 
-	int o_size = offices.size(), p_size = people.size();
-	for (int i = 0; i < o_size; ++i) {
-		for (int j = 0; j < p_size; ++j) {
-			ii o = offices[i], p = people[j];
-			dist[i][j] = abs(o.first - p.first) + abs(o.second - p.second);
-		}
-	}
+	nowchicken.push_back(make_pair(chicken[0].first,chicken[0].second));
+	Go(0,1);
+	nowchicken.pop_back();
+	Go(0,0);
 
-	int ans = INF;
-	vector<bool> perm(o_size, false);
-	for (int i = 0; i < m; ++i) perm[o_size - 1 - i] = true;
-	do {
-		// 각 사람들까지의 거리
-		vector<int> D(p_size, INF);
-		for (int i = 0; i < o_size; ++i) {
-			if (!perm[i]) continue;
-			for (int j = 0; j < p_size; ++j)
-				D[j] = min(D[j], dist[i][j]);
-		}
-
-		int tans = 0;
-		for (auto& t : D) tans += t;
-		ans = min(ans, tans);
-	} while (next_permutation(all(perm)));
-
-	printf("%d\n", ans);
-
+	cout << minnum;
 	return 0;
 }
