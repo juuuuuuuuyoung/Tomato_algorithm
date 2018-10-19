@@ -1,4 +1,3 @@
-//4:20 // 4:44
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -17,9 +16,9 @@ int calcmindistance(vector<pair<int, int>> &nowchicken){
 	int ans=0;
 
 	for(int i = 0; i < home.size(); i++){
-		int hd = 987654321; //그 집에서 치킨집까지 최소 거리
+		int hd = 987654321;
 		for(int j = 0; j < nowchicken.size(); j++){
-			int nhd = abs(home[i].first-nowchicken[j].first) + abs(home[i].second-nowchicken[j].second); //그 집에서 현재 치킨집까지 거리
+			int nhd = abs(home[i].first-nowchicken[j].first) + abs(home[i].second-nowchicken[j].second);
 			hd = min(hd,nhd);
 		}
 		ans += hd;
@@ -28,20 +27,33 @@ int calcmindistance(vector<pair<int, int>> &nowchicken){
 }
 
 void Go(int idx, int cnt){
-	if(cnt == M){ //M개 고르면
-		//최소 치킨거리 구하기
-		int nowmin = calcmindistance(nowchicken);
-		if(minnum>=nowmin) minnum = nowmin;
+	if(cnt == M){ //M개 고르면 ,최소 치킨거리 구하기
+		minnum = min(minnum,calcmindistance(nowchicken));
+		for(auto temp : nowchicken){
+			cout << "[" << temp.first<<","<<temp.second<<"] ";
+		}
+		cout << endl;
 		return;
 	}
+	//1)
 	
+	if(idx+1<chicken.size()){
+		nowchicken.push_back(make_pair(chicken[idx+1].first,chicken[idx+1].second));
+		Go(idx+1,cnt+1);
+		nowchicken.pop_back();
+		Go(idx+1,cnt);
+	}
+	
+	//2) 이렇게 풀면 반복되는 것이 많아서 시간이 오래걸린다.
+	/*
 	for(int i = idx+1; i < chicken.size(); i++){
 		nowchicken.push_back(make_pair(chicken[i].first,chicken[i].second));
 		Go(i,cnt+1);
 		nowchicken.pop_back();
 		Go(i,cnt);
 	}
-	 return;
+	*/
+	return;
 }
 
 int main(){
